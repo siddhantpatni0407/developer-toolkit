@@ -65,7 +65,7 @@ This document provides essential React CLI commands, project setup tips, and com
    ```bash
    npx create-react-app my-app
    cd my-app
-````
+   ```
 
 2. **Start development server:**
 
