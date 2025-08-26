@@ -18,7 +18,7 @@ This repository consolidates essential CLI commands, setup steps, environment co
 |--------------------|-------------------------------------------------------------|-------------------------------------------------------------|
 | **Git**            | Version control basics, shortcuts, and setup instructions   | [git-commands.md](./Git/git-commands.md)                    |
 | **React**          | Useful React CLI commands, tooling setup, and tips          | [react-commands.md](./React/react-commands.md)              |
-| **Java**           | Java CLI usage, Maven, environment setup, and compilation   | [java-commands.md](./Java/java-commands.md)                 |
+| **Java**           | Java CLI usage, Maven, environment setup, and compilation   | [java-commands-windows.md](./Java/java-commands-windows.md)                 |
 | **Python**         | Virtual environments, pip, and key commands for Python devs | [python-commands.md](./Python/python-commands.md)           |
 | **Docker**         | Common Docker commands, setup steps, and Dockerfile basics  | [docker-commands.md](./DOCKER/docker-commands.md)           |
 | **General Tools**  | Terminal tips, VS Code setup, system utilities, and more    | [terminal-commands.md](./General%20Tools/terminal-commands.md) |
