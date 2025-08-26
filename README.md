@@ -12,13 +12,14 @@ A centralized and organized toolkit containing essential CLI commands, setup ste
 
 ## 📁 Categories Overview
 
-| Category       | Description                                 | Documentation Link                          |
-|----------------|---------------------------------------------|----------------------------------------------|
-| **Git**        | Common Git commands, aliases, and setup     | [git-commands.md](./Git/git-commands.md)     |
-| **React**      | React CLI commands, tooling, and setup tips | [react-commands.md](./React/react-commands.md) |
-| **Java**       | Java commands, Maven, and environment setup | [java-commands.md](./Java/java-commands.md)  |
-| **Docker**     | Docker commands and basic configuration     | [docker-commands.md](./DOCKER/docker-commands.md) |
-| **General Tools** | Terminal commands and editor setup       | [terminal-commands.md](./Genral%20Tools/terminal-commands.md) |
+| Category         | Description                                     | Documentation Link                                      |
+|------------------|-------------------------------------------------|----------------------------------------------------------|
+| **Git**          | Common Git commands, aliases, and setup         | [git-commands.md](./Git/git-commands.md)                 |
+| **React**        | React CLI commands, tooling, and setup tips     | [react-commands.md](./React/react-commands.md)           |
+| **Java**         | Java commands, Maven, and environment setup     | [java-commands.md](./Java/java-commands.md)              |
+| **Python**       | Python environment setup and commonly used CLI commands | [python-commands.md](./Python/python-commands.md)      |
+| **Docker**       | Docker commands and basic configuration         | [docker-commands.md](./DOCKER/docker-commands.md)        |
+| **General Tools**| Terminal commands and editor setup              | [terminal-commands.md](./General%20Tools/terminal-commands.md) |
 
 ---
 
