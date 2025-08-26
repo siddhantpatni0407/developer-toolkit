@@ -6,55 +6,55 @@ This document provides essential React CLI commands, project setup tips, and com
 
 ## 🛠 Environment Setup
 
-| Command                             | Description                                                        |
-|------------------------------------|--------------------------------------------------------------------|
-| `npx create-react-app my-app`      | Create a new React project using Create React App (CRA).           |
-| `npm start`                        | Start the React development server (usually runs at localhost:3000). |
-| `npm run build`                    | Build the React app for production (optimized and minified).       |
-| `npm test`                        | Run tests using Jest (default testing framework in CRA).           |
-| `npm run eject`                   | Eject from CRA to customize the build configuration (irreversible). |
-| `npm install -g serve`            | Install a static server globally for serving the production build. |
+| Command                       | Description                                                          |
+| ----------------------------- | -------------------------------------------------------------------- |
+| `npx create-react-app my-app` | Create a new React project using Create React App (CRA).             |
+| `npm start`                   | Start the React development server (usually runs at localhost:3000). |
+| `npm run build`               | Build the React app for production (optimized and minified).         |
+| `npm test`                    | Run tests using Jest (default testing framework in CRA).             |
+| `npm run eject`               | Eject from CRA to customize the build configuration (irreversible).  |
+| `npm install -g serve`        | Install a static server globally for serving the production build.   |
 
 ---
 
 ## ⚙️ Common React CLI Commands
 
-| Command                              | Description                                                  |
-|-------------------------------------|--------------------------------------------------------------|
-| `npm install <package>`              | Install a new npm package and add it to `package.json`.       |
-| `npm uninstall <package>`            | Remove a package from the project.                            |
-| `npm update`                        | Update all packages to their latest versions respecting semver. |
-| `npm audit`                        | Run security audit on installed dependencies.                 |
-| `npm run lint`                     | Run linter (if configured, e.g., ESLint).                     |
-| `npx eslint .`                    | Run ESLint directly on the current directory (requires ESLint installed). |
-| `npx react-devtools`              | Launch React Developer Tools standalone app for debugging.     |
-| `npm outdated`                    | Check for outdated npm packages in your project.              |
+| Command                   | Description                                                               |
+| ------------------------- | ------------------------------------------------------------------------- |
+| `npm install <package>`   | Install a new npm package and add it to `package.json`.                   |
+| `npm uninstall <package>` | Remove a package from the project.                                        |
+| `npm update`              | Update all packages to their latest versions respecting semver.           |
+| `npm audit`               | Run security audit on installed dependencies.                             |
+| `npm run lint`            | Run linter (if configured, e.g., ESLint).                                 |
+| `npx eslint .`            | Run ESLint directly on the current directory (requires ESLint installed). |
+| `npx react-devtools`      | Launch React Developer Tools standalone app for debugging.                |
+| `npm outdated`            | Check for outdated npm packages in your project.                          |
 
 ---
 
 ## 🔨 Useful npm Scripts
 
-| Script                             | Description                                                    |
-|-----------------------------------|----------------------------------------------------------------|
-| `start`                           | Start development server with hot reloading.                   |
-| `build`                           | Create optimized production build.                             |
-| `test`                            | Run tests in watch mode.                                       |
-| `eject`                          | Expose CRA config for customization.                           |
-| `lint`                           | Run linting on source files (custom script, optional).         |
-| `prettier --write .`              | Format codebase with Prettier (requires Prettier installed).   |
-| `npm run format`                  | Run custom format script (usually configured to run Prettier). |
+| Script               | Description                                                    |
+| -------------------- | -------------------------------------------------------------- |
+| `start`              | Start development server with hot reloading.                   |
+| `build`              | Create optimized production build.                             |
+| `test`               | Run tests in watch mode.                                       |
+| `eject`              | Expose CRA config for customization.                           |
+| `lint`               | Run linting on source files (custom script, optional).         |
+| `prettier --write .` | Format codebase with Prettier (requires Prettier installed).   |
+| `npm run format`     | Run custom format script (usually configured to run Prettier). |
 
 ---
 
 ## 🧪 Testing & Debugging
 
-| Command / Tool                    | Description                                                    |
-|---------------------------------|----------------------------------------------------------------|
-| `npm test`                      | Run Jest tests in watch mode by default.                       |
-| `npm test -- --coverage`        | Generate a test coverage report.                               |
-| `npm run test:ci`               | Run tests once for CI environments (custom script).            |
-| React Developer Tools            | Browser extension or standalone app for inspecting React components and hooks state. |
-| `console.log()` & Debugger      | Basic JS debugging via console and browser devtools.           |
+| Command / Tool             | Description                                                                          |
+| -------------------------- | ------------------------------------------------------------------------------------ |
+| `npm test`                 | Run Jest tests in watch mode by default.                                             |
+| `npm test -- --coverage`   | Generate a test coverage report.                                                     |
+| `npm run test:ci`          | Run tests once for CI environments (custom script).                                  |
+| React Developer Tools      | Browser extension or standalone app for inspecting React components and hooks state. |
+| `console.log()` & Debugger | Basic JS debugging via console and browser devtools.                                 |
 
 ---
 
