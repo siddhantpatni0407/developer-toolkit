@@ -21,7 +21,7 @@ This repository consolidates essential CLI commands, setup steps, environment co
 | **Java**          | Java CLI usage, Maven, environment setup, and compilation                                               | [java-commands-windows.md](./Java/java-commands-windows.md)                                |
 | **Python**        | Virtual environments, pip, and key commands for Python devs                                             | [python-commands-windows.md](./Python/python-commands-windows.md)                          |
 | **Docker**        | Common Docker commands, setup steps, and Dockerfile basics                                              | [docker-commands.md](./DOCKER/docker-commands.md)                                          |
-| **Kubernetes**    | Kubectl usage, Minikube commands, deployment, services, and cluster management basics                   | [kubernetes-commands.md](./KUBERNETES/kubernetes-commands.md)                              |
+| **Kubernetes**    | Kubectl usage, Minikube commands, deployment, services, and cluster management basics                   | [kubernetes-commands.md](./Kubernetes/kubernetes-commands.md)                              |
 | **General Tools** | Terminal tips, VS Code setup, system utilities, and more                                                | [terminal-commands.md](./General%20Tools/terminal-commands.md)                             |
 | **Documentation** | Guides, best practices, and setup for documenting all techs like Java, Python, Docker, Kubernetes, etc. | [official-documentation-reference.md](./Documentation/official-documentation-reference.md) |
 
