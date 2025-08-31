@@ -1,4 +1,4 @@
-# MongoDB Commands & Cheat Sheet (Enhanced)
+# MongoDB Commands
 
 This guide lists the **most commonly used MongoDB commands** for Windows (via `mongosh` or Compass), including advanced queries, aggregation, indexes, users, and database management.
 
