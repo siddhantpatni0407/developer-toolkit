@@ -23,8 +23,12 @@ A centralized index of official documentation and key resources for various deve
 | **VS Code**    | Visual Studio Code editor documentation                             | [VS Code Docs](https://code.visualstudio.com/docs)                        |
 | **Vue.js**     | Progressive JavaScript framework for building UI                    | [Vue.js Docs](https://vuejs.org/guide/introduction.html)                  |
 | **Gradle**     | Modern build automation tool documentation                          | [Gradle Docs](https://docs.gradle.org/current/userguide/userguide.html)   |
+| **Oracle DB**  | Oracle relational database management system documentation          | [Oracle DB Docs](https://docs.oracle.com/en/database/)                    |
+| **PostgreSQL** | Open-source relational database documentation                       | [PostgreSQL Docs](https://www.postgresql.org/docs/)                       |
+| **MySQL**      | Open-source relational database documentation                       | [MySQL Docs](https://dev.mysql.com/doc/)                                  |
+| **MongoDB**    | NoSQL database platform documentation                               | [MongoDB Docs](https://www.mongodb.com/docs/)                             |
+| **AWS**        | Amazon Web Services cloud platform documentation                    | [AWS Docs](https://docs.aws.amazon.com/)                                  |
 
 ---
 
 > 💡 _Use this file as a quick reference to official docs and tutorials to deepen your understanding and troubleshooting skills._
-
