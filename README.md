@@ -14,18 +14,20 @@ This repository consolidates essential CLI commands, setup steps, environment co
 
 ## 📁 Categories Overview
 
-| 🗂️ Category       | 📄 Description                                                                                            | 🔗 Documentation Link                                                                      |
-| ----------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| **Git**           | Version control basics, shortcuts, and setup instructions                                                 | [git-commands.md](./Git/git-commands.md)                                                   |
-| **React**         | Useful React CLI commands, tooling setup, and tips                                                        | [react-commands.md](./React/react-commands.md)                                             |
-| **Java**          | Java CLI usage, Maven, environment setup, and compilation                                                 | [java-commands-windows.md](./Java/java-commands-windows.md)                                |
-| **Python**        | Virtual environments, pip, and key commands for Python devs                                               | [python-commands-windows.md](./Python/python-commands-windows.md)                          |
-| **Docker**        | Common Docker commands, setup steps, and Dockerfile basics                                                | [docker-commands.md](./Docker/docker-commands.md)                                          |
-| **Docker**        | Full Windows guide for Docker installation, running containers, building images, and cleanup              | [README-Docker-Windows.md](./Docker/README-Docker-Windows.md)                              |
-| **Kubernetes**    | Kubectl usage, Minikube commands, deployment, services, and cluster management basics                     | [kubernetes-commands.md](./Kubernetes/kubernetes-commands.md)                              |
-| **Kubernetes**    | Full Windows guide for Minikube setup, deploying containers, services, dashboards, and cluster management | [README-K8S-Minikube-Windows.md](./Kubernetes/README-K8S-Minikube-Windows.md)              |
-| **General Tools** | Terminal tips, VS Code setup, system utilities, and more                                                  | [terminal-commands.md](./General%20Tools/terminal-commands.md)                             |
-| **Documentation** | Guides, best practices, and setup for documenting all techs like Java, Python, Docker, Kubernetes, etc.   | [official-documentation-reference.md](./Documentation/official-documentation-reference.md) |
+| 🗂️ Category       | 📄 Description                                                                                                 | 🔗 Documentation Link                                                                      |
+| ----------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| **Git**           | Version control basics, shortcuts, and setup instructions                                                      | [git-commands.md](./Git/git-commands.md)                                                   |
+| **React**         | Useful React CLI commands, tooling setup, and tips                                                             | [react-commands.md](./React/react-commands.md)                                             |
+| **Java**          | Java CLI usage, Maven, environment setup, and compilation                                                      | [java-commands-windows.md](./Java/java-commands-windows.md)                                |
+| **Python**        | Virtual environments, pip, and key commands for Python devs                                                    | [python-commands-windows.md](./Python/python-commands-windows.md)                          |
+| **Docker**        | Common Docker commands, setup steps, and Dockerfile basics                                                     | [docker-commands.md](./Docker/docker-commands.md)                                          |
+| **Docker**        | Full Windows guide for Docker installation, running containers, building images, and cleanup                   | [README-Docker-Windows.md](./Docker/README-Docker-Windows.md)                              |
+| **Kubernetes**    | Kubectl usage, Minikube commands, deployment, services, and cluster management basics                          | [kubernetes-commands.md](./Kubernetes/kubernetes-commands.md)                              |
+| **Kubernetes**    | Full Windows guide for Minikube setup, deploying containers, services, dashboards, and cluster management      | [README-K8S-Minikube-Windows.md](./Kubernetes/README-K8S-Minikube-Windows.md)              |
+| **MongoDB**       | Common MongoDB commands, queries, and cheat sheet for Windows                                                  | [README-MongoDB-Commands-Windows.md](./MongoDB/README-MongoDB-Commands-Windows.md)         |
+| **MongoDB**       | Full Windows guide for MongoDB installation, setup (server, shell, Compass), verification, and troubleshooting | [README-MongoDB-Setup-Windows.md](./MongoDB/README-MongoDB-Setup-Windows.md)               |
+| **General Tools** | Terminal tips, VS Code setup, system utilities, and more                                                       | [terminal-commands.md](./General%20Tools/terminal-commands.md)                             |
+| **Documentation** | Guides, best practices, and setup for documenting all techs like Java, Python, Docker, Kubernetes, etc.        | [official-documentation-reference.md](./Documentation/official-documentation-reference.md) |
 
 ---
 
