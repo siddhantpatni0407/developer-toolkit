@@ -28,6 +28,7 @@ This repository consolidates essential CLI commands, setup steps, environment co
 | **MongoDB**       | Full Windows guide for MongoDB installation, setup (server, shell, Compass), verification, and troubleshooting | [README-MongoDB-Setup-Windows.md](./MongoDB/README-MongoDB-Setup-Windows.md)               |
 | **AWS Kinesis**   | LocalStack-based Kinesis setup guide with CLI commands, examples, and troubleshooting                          | [kinesis-command.md](./AWS/Kinesis/kinesis-command.md)                                     |
 | **AWS SQS**       | LocalStack-based SQS setup guide with CLI commands, message handling, and troubleshooting                      | [sqs-command.md](./AWS/SQS/sqs-command.md)                                                 |
+| **Apache Kafka**  | Windows-based Kafka setup guide with installation steps, topic management, producers/consumers, and debugging  | [kafka-command-windows.md](./AWS/Apache Kafka/kafka-command-windows.md)                           |
 | **General Tools** | Terminal tips, VS Code setup, system utilities, and more                                                       | [terminal-commands.md](./General%20Tools/terminal-commands.md)                             |
 | **Documentation** | Guides, best practices, and setup for documenting all techs like Java, Python, Docker, Kubernetes, etc.        | [official-documentation-reference.md](./Documentation/official-documentation-reference.md) |
 
