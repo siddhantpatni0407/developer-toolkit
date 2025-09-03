@@ -26,6 +26,7 @@ This repository consolidates essential CLI commands, setup steps, environment co
 | **Kubernetes**    | Full Windows guide for Minikube setup, deploying containers, services, dashboards, and cluster management      | [README-K8S-Minikube-Windows.md](./Kubernetes/README-K8S-Minikube-Windows.md)              |
 | **MongoDB**       | Common MongoDB commands, queries, and cheat sheet for Windows                                                  | [README-MongoDB-Commands-Windows.md](./MongoDB/README-MongoDB-Commands-Windows.md)         |
 | **MongoDB**       | Full Windows guide for MongoDB installation, setup (server, shell, Compass), verification, and troubleshooting | [README-MongoDB-Setup-Windows.md](./MongoDB/README-MongoDB-Setup-Windows.md)               |
+| **AWS Kinesis**   | LocalStack-based Kinesis setup guide with CLI commands, examples, and troubleshooting                          | [kinesis-command.md](./AWS/Kinesis/kinesis-command.md)                                     |
 | **General Tools** | Terminal tips, VS Code setup, system utilities, and more                                                       | [terminal-commands.md](./General%20Tools/terminal-commands.md)                             |
 | **Documentation** | Guides, best practices, and setup for documenting all techs like Java, Python, Docker, Kubernetes, etc.        | [official-documentation-reference.md](./Documentation/official-documentation-reference.md) |
 
