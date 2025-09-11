@@ -14,6 +14,19 @@ This repository consolidates essential CLI commands, setup steps, environment co
 
 ## 📁 Categories Overview
 
+<details open>
+<summary>🔹 Setup & Environment (💡 Start Here)</summary>
+
+| 🗂️ Category            | 📄 Description                          | 🔗 Documentation Link                                                |
+| ---------------------- | --------------------------------------- | -------------------------------------------------------------------- |
+| **Softwares List**     | Full list of developer software & tools | [ReadMe-Softwares-List.md](./Setup/ReadMe-Softwares-List.md)         |
+| **IDE Plugins**        | IntelliJ IDEA & VS Code plugin list     | [ReadMe-IDE-plugins.md](./Setup/ReadMe-IDE-plugins.md)               |
+| **Browser Extensions** | Developer browser extensions            | [ReadMe-browser-extensions.md](./Setup/ReadMe-browser-extensions.md) |
+
+</details>
+
+---
+
 <details>
 <summary>🔹 Version Control</summary>
 
@@ -84,19 +97,6 @@ This repository consolidates essential CLI commands, setup steps, environment co
 | ----------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------ |
 | **General Tools** | Terminal tips, VS Code setup, utilities  | [windows-terminal-commands.md](./General%20Tools/windows-terminal-commands.md)             |
 | **Documentation** | References, best practices, setup guides | [official-documentation-reference.md](./Documentation/official-documentation-reference.md) |
-
-</details>
-
----
-
-<details open>
-<summary>🔹 Setup & Environment (💡 Start Here)</summary>
-
-| 🗂️ Category            | 📄 Description                          | 🔗 Documentation Link                                                |
-| ---------------------- | --------------------------------------- | -------------------------------------------------------------------- |
-| **Softwares List**     | Full list of developer software & tools | [ReadMe-Softwares-List.md](./Setup/ReadMe-Softwares-List.md)         |
-| **IDE Plugins**        | IntelliJ IDEA & VS Code plugin list     | [ReadMe-IDE-plugins.md](./Setup/ReadMe-IDE-plugins.md)               |
-| **Browser Extensions** | Developer browser extensions            | [ReadMe-browser-extensions.md](./Setup/ReadMe-browser-extensions.md) |
 
 </details>
 
