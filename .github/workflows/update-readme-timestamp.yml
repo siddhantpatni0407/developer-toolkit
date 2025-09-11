@@ -6,6 +6,9 @@ permissions:
 on:
   push:
     branches: [ main, master ]
+    # optional: to avoid running when only this workflow changes
+    # paths-ignore:
+    #   - '.github/workflows/update-readme-timestamp.yml'
 
 jobs:
   update-readme:
@@ -24,11 +27,11 @@ jobs:
 
       - name: Update README Last Updated table
         env:
-          TZ: 'Asia/Kolkata'
+          TZ: 'Asia/Kolkata'   # change or remove as needed
         run: |
           set -euo pipefail
 
-          # find README (customize if needed)
+          # 1) locate README (customize paths if needed)
           README=README.md
           if [ ! -f "$README" ]; then README=Setup/ReadMe-Softwares-List.md; fi
           if [ ! -f "$README" ]; then
@@ -36,25 +39,28 @@ jobs:
             exit 0
           fi
 
+          # expose README to subsequent steps
           echo "README determined as: $README"
           echo "README=$README" >> $GITHUB_ENV
 
-          # gather metadata
+          # 2) gather metadata
           NEW_DATE="$(date '+%Y-%m-%d %H:%M %z')"
           REPO="${GITHUB_REPOSITORY}"
+          # branch name: safe fallback to parse refs/heads/...
           BRANCH="${GITHUB_REF_NAME:-$(echo ${GITHUB_REF} | sed 's#refs/heads/##')}"
           ACTOR="${GITHUB_ACTOR}"
+          # short commit sha (try git, else fallback to GITHUB_SHA)
           COMMIT_SHA="$(git rev-parse --short HEAD 2>/dev/null || echo ${GITHUB_SHA:0:7})"
           COMMIT_URL="https://github.com/${REPO}/commit/${COMMIT_SHA}"
-          # commit message: try to read from git, otherwise from event payload
-          COMMIT_MSG="$(git log -1 --pretty=%s 2>/dev/null || jq -r '.head_commit.message // ""' "$GITHUB_EVENT_PATH" 2>/dev/null || echo "")"
+          # commit message: prefer git log, fallback to event payload
+          COMMIT_MSG="$(git log -1 --pretty=%s 2>/dev/null || (jq -r '.head_commit.message // ""' "$GITHUB_EVENT_PATH" 2>/dev/null) || echo "")"
           # escape backticks in commit message for safe markdown embedding
-          ESC_COMMIT_MSG="$(printf '%s' "$COMMIT_MSG" | sed 's/`/`'\"'\"'`/g')"
+          ESC_COMMIT_MSG="$(printf '%s' "$COMMIT_MSG" | sed 's/`/`'"'"'`/g')"
           COMPARE_URL="https://github.com/${REPO}/compare/${GITHUB_SHA}^...${GITHUB_SHA}"
           RUN_URL="https://github.com/${REPO}/actions/runs/${GITHUB_RUN_ID}"
           RUN_NUM="${GITHUB_RUN_NUMBER:-${GITHUB_RUN_ID}}"
 
-          # write markdown table to temp file (variables will be expanded)
+          # 3) write markdown table to temp file (variables expanded)
           cat > /tmp/details.md <<EOF
 ## 📅 Last Updated
 
@@ -73,20 +79,20 @@ EOF
           echo "Prepared /tmp/details.md:"
           sed -n '1,200p' /tmp/details.md
 
-          # Replace the block between '## 📅 Last Updated' and the next '## ' heading (or EOF).
+          # 4) Replace existing "## 📅 Last Updated" block (until next top-level '## ' heading) with the temp file
           if grep -q '^## 📅 Last Updated' "$README"; then
             awk '
               BEGIN { printed=0; skip=0; }
               {
                 if ($0 ~ /^## 📅 Last Updated/ && printed==0) {
-                  # print the replacement file
+                  # print replacement file content
                   while ((getline line < "/tmp/details.md") > 0) print line;
                   printed=1;
                   skip=1;
                   next;
                 }
                 if (skip==1 && $0 ~ /^## /) {
-                  # reached next top-level heading -> stop skipping and print this line
+                  # reached next heading -> stop skipping and print this line
                   skip=0;
                   print $0;
                   next;
@@ -95,22 +101,22 @@ EOF
                   # inside old block -> skip
                   next;
                 }
-                # normal line -> print
+                # normal printing
                 print $0;
               }
               END {
                 if (printed==0) {
-                  # fallback: append the details if heading wasn't found (shouldn't happen)
+                  # fallback: append details at end
                   while ((getline line < "/tmp/details.md") > 0) print line;
                 }
               }
             ' "$README" > /tmp/README.tmp && mv /tmp/README.tmp "$README"
           else
-            # Insert block after first line (under H1) if heading not present
+            # Insert block after first H1 heading if no existing heading found
             awk 'NR==1{print; print ""; while ((getline line < "/tmp/details.md") > 0) print line; next}1' "$README" > /tmp/README.tmp && mv /tmp/README.tmp "$README"
           fi
 
-          # Show the diff (for GitHub Actions logs)
+          # 5) show diff for logs
           git --no-pager diff -- "$README" || true
 
       - name: Commit & push if changed
@@ -131,6 +137,7 @@ EOF
           git config user.email "$GIT_EMAIL"
           git config user.name "$GIT_NAME"
 
+          # commit only if the README changed
           if git status --porcelain | grep -q "$(basename "$README")"; then
             git add -- "$README"
             git commit -m "chore: update README Last Updated table" || echo "No commit created"
@@ -139,6 +146,4 @@ EOF
             echo "No changes in README - nothing to commit."
           fi
 
-# ----------------------------
-# If your repo policy blocks GITHUB_TOKEN writing, use the PAT alternative from previous comments.
-# ----------------------------
+# If your organization policy blocks GITHUB_TOKEN writes, use the PAT alternative described earlier (create PAT, store in secret, and use it for push).
