@@ -14,7 +14,7 @@ This repository consolidates essential CLI commands, setup steps, environment co
 
 ## 📁 Categories Overview
 
-<details open>
+<details>
 <summary>🔹 Setup & Environment (💡 Start Here)</summary>
 
 | 🗂️ Category            | 📄 Description                          | 🔗 Documentation Link                                                |
