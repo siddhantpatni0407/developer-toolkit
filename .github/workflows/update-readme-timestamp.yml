@@ -1,0 +1,62 @@
+name: Update README last-updated
+
+on:
+  push:
+    branches: [ main, master ]
+    # optional: uncomment to skip runs when only workflow file itself changes
+    # paths-ignore:
+    #   - '.github/workflows/update-readme-timestamp.yml'
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Skip if action itself triggered this run
+        if: ${{ github.actor == 'github-actions' }}
+        run: |
+          echo "Triggered by github-actions. Exiting to avoid loop."
+          exit 0
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Update README timestamp
+        env:
+          TZ: 'Asia/Kolkata'          # optional, change to your timezone (or remove)
+        run: |
+          README=README.md
+          # fallback: check Setup folder location (customize if needed)
+          if [ ! -f "$README" ]; then README=Setup/ReadMe-Softwares-List.md; fi
+          if [ ! -f "$README" ]; then echo "README not found at expected paths. Exiting."; exit 0; fi
+
+          NEW_DATE="$(date '+%Y-%m-%d %H:%M %z')"
+          echo "Setting Last Updated → $NEW_DATE in $README"
+
+          # If file contains "Last Updated:" (anywhere), replace that line.
+          if grep -q -E 'Last Updated:' "$README"; then
+            sed -E -i "s#(Last Updated:).*#\1 \`$NEW_DATE\`#g" "$README"
+          elif grep -q -E '##.*Last Updated' "$README"; then
+            sed -E -i "s#(##.*Last Updated).*#\1 \`$NEW_DATE\`#g" "$README"
+          else
+            # No marker found — insert after first H1 heading
+            awk -v d="$NEW_DATE" 'NR==1{print; print ""; print "## 📅 Last Updated: `" d "`"; next}1' "$README" > /tmp/README.tmp && mv /tmp/README.tmp "$README"
+          fi
+
+          git --no-pager diff -- "$README" || true
+
+      - name: Commit & push if changed
+        env:
+          GIT_EMAIL: github-actions[bot]@users.noreply.github.com
+          GIT_NAME: github-actions[bot]
+        run: |
+          git config user.email "$GIT_EMAIL"
+          git config user.name "$GIT_NAME"
+          if git status --porcelain | grep -q README; then
+            git add "$README"
+            git commit -m "chore: update README Last Updated timestamp"
+            git push origin HEAD:${{ github.ref_name }}
+          else
+            echo "No changes in README - nothing to commit."
+          fi
