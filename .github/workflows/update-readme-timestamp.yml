@@ -39,42 +39,51 @@ jobs:
             exit 0
           fi
 
-          # expose README to subsequent steps
+          # export README path for later steps
           echo "README determined as: $README"
           echo "README=$README" >> $GITHUB_ENV
 
           # 2) gather metadata
           NEW_DATE="$(date '+%Y-%m-%d %H:%M %z')"
           REPO="${GITHUB_REPOSITORY}"
-          # branch name: safe fallback to parse refs/heads/...
           BRANCH="${GITHUB_REF_NAME:-$(echo ${GITHUB_REF} | sed 's#refs/heads/##')}"
           ACTOR="${GITHUB_ACTOR}"
-          # short commit sha (try git, else fallback to GITHUB_SHA)
           COMMIT_SHA="$(git rev-parse --short HEAD 2>/dev/null || echo ${GITHUB_SHA:0:7})"
           COMMIT_URL="https://github.com/${REPO}/commit/${COMMIT_SHA}"
-          # commit message: prefer git log, fallback to event payload
           COMMIT_MSG="$(git log -1 --pretty=%s 2>/dev/null || (jq -r '.head_commit.message // ""' "$GITHUB_EVENT_PATH" 2>/dev/null) || echo "")"
-          # escape backticks in commit message for safe markdown embedding
-          ESC_COMMIT_MSG="$(printf '%s' "$COMMIT_MSG" | sed 's/`/`'"'"'`/g')"
+          ESC_COMMIT_MSG="$(printf '%s' "$COMMIT_MSG" | sed 's/`/`'\"'\"'`/g')"
           COMPARE_URL="https://github.com/${REPO}/compare/${GITHUB_SHA}^...${GITHUB_SHA}"
           RUN_URL="https://github.com/${REPO}/actions/runs/${GITHUB_RUN_ID}"
           RUN_NUM="${GITHUB_RUN_NUMBER:-${GITHUB_RUN_ID}}"
 
           # 3) write markdown table to temp file (variables expanded)
-          cat > /tmp/details.md <<EOF
+          cat > /tmp/details.md <<'MD_EOF'
 ## 📅 Last Updated
 
 | Field             | Details |
 | ----------------- | ------- |
-| 🗓️ Date/Time      | \`$NEW_DATE\` |
-| 📦 Repository     | \`$REPO\` |
-| 🔀 Branch         | \`$BRANCH\` |
-| 👤 Author         | \`$ACTOR\` |
-| 📝 Commit Message | \`$ESC_COMMIT_MSG\` |
-| 🔗 Commit         | [\`$COMMIT_SHA\`]($COMMIT_URL) |
-| 📊 Compare        | [View changes]($COMPARE_URL) |
-| ⚙️ Workflow Run   | [Run #${RUN_NUM}]($RUN_URL) |
-EOF
+| 🗓️ Date/Time      | `__NEW_DATE__` |
+| 📦 Repository     | `__REPO__` |
+| 🔀 Branch         | `__BRANCH__` |
+| 👤 Author         | `__ACTOR__` |
+| 📝 Commit Message | `__ESC_COMMIT_MSG__` |
+| 🔗 Commit         | [`__COMMIT_SHA__`](__COMMIT_URL__) |
+| 📊 Compare        | [View changes](__COMPARE_URL__) |
+| ⚙️ Workflow Run   | [Run #__RUN_NUM__](__RUN_URL__) |
+MD_EOF
+
+          # Replace placeholders with actual values safely
+          sed -i "s|__NEW_DATE__|$NEW_DATE|g" /tmp/details.md
+          sed -i "s|__REPO__|$REPO|g" /tmp/details.md
+          sed -i "s|__BRANCH__|$BRANCH|g" /tmp/details.md
+          sed -i "s|__ACTOR__|$ACTOR|g" /tmp/details.md
+          # Use a safe delimiter for commit message replacement
+          sed -i "s|__ESC_COMMIT_MSG__|$(printf '%s' "$ESC_COMMIT_MSG" | sed 's|[&/\]|\\&|g')|g" /tmp/details.md
+          sed -i "s|__COMMIT_SHA__|$COMMIT_SHA|g" /tmp/details.md
+          sed -i "s|__COMMIT_URL__|$COMMIT_URL|g" /tmp/details.md
+          sed -i "s|__COMPARE_URL__|$COMPARE_URL|g" /tmp/details.md
+          sed -i "s|__RUN_URL__|$RUN_URL|g" /tmp/details.md
+          sed -i "s|__RUN_NUM__|$RUN_NUM|g" /tmp/details.md
 
           echo "Prepared /tmp/details.md:"
           sed -n '1,200p' /tmp/details.md
@@ -85,28 +94,23 @@ EOF
               BEGIN { printed=0; skip=0; }
               {
                 if ($0 ~ /^## 📅 Last Updated/ && printed==0) {
-                  # print replacement file content
                   while ((getline line < "/tmp/details.md") > 0) print line;
                   printed=1;
                   skip=1;
                   next;
                 }
                 if (skip==1 && $0 ~ /^## /) {
-                  # reached next heading -> stop skipping and print this line
                   skip=0;
                   print $0;
                   next;
                 }
                 if (skip==1) {
-                  # inside old block -> skip
                   next;
                 }
-                # normal printing
                 print $0;
               }
               END {
                 if (printed==0) {
-                  # fallback: append details at end
                   while ((getline line < "/tmp/details.md") > 0) print line;
                 }
               }
@@ -137,7 +141,6 @@ EOF
           git config user.email "$GIT_EMAIL"
           git config user.name "$GIT_NAME"
 
-          # commit only if the README changed
           if git status --porcelain | grep -q "$(basename "$README")"; then
             git add -- "$README"
             git commit -m "chore: update README Last Updated table" || echo "No commit created"
@@ -146,4 +149,5 @@ EOF
             echo "No changes in README - nothing to commit."
           fi
 
-# If your organization policy blocks GITHUB_TOKEN writes, use the PAT alternative described earlier (create PAT, store in secret, and use it for push).
+# Note: If your repository or organization blocks GITHUB_TOKEN write access,
+# use a Personal Access Token (PAT) pushed into repository secrets and the PAT-based push method (see earlier examples).
