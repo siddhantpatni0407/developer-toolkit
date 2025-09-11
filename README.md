@@ -8,29 +8,97 @@ This repository consolidates essential CLI commands, setup steps, environment co
 
 ---
 
-## 📅 Last Updated: `2025-08-27`
+## 📅 Last Updated: `2025-09-12`
 
 ---
 
 ## 📁 Categories Overview
 
-| 🗂️ Category       | 📄 Description                                                                                                 | 🔗 Documentation Link                                                                      |
-| ----------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| **Git**           | Version control basics, shortcuts, and setup instructions                                                      | [git-commands.md](./Git/git-commands.md)                                                   |
-| **React**         | Useful React CLI commands, tooling setup, and tips                                                             | [react-commands.md](./React/react-commands.md)                                             |
-| **Java**          | Java CLI usage, Maven, environment setup, and compilation                                                      | [java-commands-windows.md](./Java/java-commands-windows.md)                                |
-| **Python**        | Virtual environments, pip, and key commands for Python devs                                                    | [python-commands-windows.md](./Python/python-commands-windows.md)                          |
-| **Docker**        | Common Docker commands, setup steps, and Dockerfile basics                                                     | [docker-commands.md](./Docker/docker-commands.md)                                          |
-| **Docker**        | Full Windows guide for Docker installation, running containers, building images, and cleanup                   | [README-Docker-Windows.md](./Docker/README-Docker-Windows.md)                              |
-| **Kubernetes**    | Kubectl usage, Minikube commands, deployment, services, and cluster management basics                          | [kubernetes-commands.md](./Kubernetes/kubernetes-commands.md)                              |
-| **Kubernetes**    | Full Windows guide for Minikube setup, deploying containers, services, dashboards, and cluster management      | [README-K8S-Minikube-Windows.md](./Kubernetes/README-K8S-Minikube-Windows.md)              |
-| **MongoDB**       | Common MongoDB commands, queries, and cheat sheet for Windows                                                  | [README-MongoDB-Commands-Windows.md](./MongoDB/README-MongoDB-Commands-Windows.md)         |
-| **MongoDB**       | Full Windows guide for MongoDB installation, setup (server, shell, Compass), verification, and troubleshooting | [README-MongoDB-Setup-Windows.md](./MongoDB/README-MongoDB-Setup-Windows.md)               |
-| **AWS Kinesis**   | LocalStack-based Kinesis setup guide with CLI commands, examples, and troubleshooting                          | [kinesis-command.md](./AWS/Kinesis/kinesis-commands.md)                                    |
-| **AWS SQS**       | LocalStack-based SQS setup guide with CLI commands, message handling, and troubleshooting                      | [sqs-command.md](./AWS/SQS/sqs-commands.md)                                                |
-| **Apache Kafka**  | Windows-based Kafka setup guide with installation steps, topic management, producers/consumers, and debugging  | [kafka-command-windows.md](./AWS/Apache%20Kafka/kafka-command-windows.md)                  |
-| **General Tools** | Terminal tips, VS Code setup, system utilities, and more                                                       | [terminal-commands.md](./General%20Tools/terminal-commands.md)                             |
-| **Documentation** | Guides, best practices, and setup for documenting all techs like Java, Python, Docker, Kubernetes, etc.        | [official-documentation-reference.md](./Documentation/official-documentation-reference.md) |
+<details>
+<summary>🔹 Version Control</summary>
+
+| 🗂️ Category | 📄 Description                                 | 🔗 Documentation Link                    |
+| ----------- | ---------------------------------------------- | ---------------------------------------- |
+| **Git**     | Version control basics, shortcuts, setup guide | [git-commands.md](./Git/git-commands.md) |
+
+</details>
+
+---
+
+<details>
+<summary>🔹 Programming Languages</summary>
+
+| 🗂️ Category | 📄 Description                                     | 🔗 Documentation Link                                             |
+| ----------- | -------------------------------------------------- | ----------------------------------------------------------------- |
+| **Java**    | Java CLI usage, builds, and environment setup      | [java-commands-windows.md](./Java/java-commands-windows.md)       |
+| **Python**  | Virtual environments, pip, and commands for Python | [python-commands-windows.md](./Python/python-commands-windows.md) |
+| **React**   | React CLI commands, tooling setup, and tips        | [react-commands.md](./React/react-commands.md)                    |
+
+</details>
+
+---
+
+<details>
+<summary>🔹 Databases</summary>
+
+| 🗂️ Category    | 📄 Description                                 | 🔗 Documentation Link                                                                                                                                              |
+| -------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **PostgreSQL** | PgAdmin setup, DB commands, and best practices | [PgAdmin](https://www.pgadmin.org/download/) (external)                                                                                                            |
+| **MongoDB**    | Common commands, queries, and setup (Windows)  | [README-MongoDB-Commands-Windows.md](./MongoDB/README-MongoDB-Commands-Windows.md)<br>[README-MongoDB-Setup-Windows.md](./MongoDB/README-MongoDB-Setup-Windows.md) |
+
+</details>
+
+---
+
+<details>
+<summary>🔹 Containers & Orchestration</summary>
+
+| 🗂️ Category    | 📄 Description                                                              | 🔗 Documentation Link                                                         |
+| -------------- | --------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| **Docker**     | Commands, setup, Dockerfile basics                                          | [docker-commands.md](./Docker/docker-commands.md)                             |
+| **Docker**     | Full Windows installation & container management guide                      | [README-Docker-Windows.md](./Docker/README-Docker-Windows.md)                 |
+| **Kubernetes** | Kubectl usage, Minikube commands, deployments, services, cluster management | [kubernetes-commands.md](./Kubernetes/kubernetes-commands.md)                 |
+| **Kubernetes** | Full Windows guide for Minikube setup & cluster management                  | [README-K8S-Minikube-Windows.md](./Kubernetes/README-K8S-Minikube-Windows.md) |
+
+</details>
+
+---
+
+<details>
+<summary>🔹 Cloud & Messaging</summary>
+
+| 🗂️ Category      | 📄 Description                                                    | 🔗 Documentation Link                                                     |
+| ---------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| **AWS Kinesis**  | LocalStack-based Kinesis setup, CLI commands, and troubleshooting | [kinesis-commands.md](./AWS/Kinesis/kinesis-commands.md)                  |
+| **AWS SQS**      | LocalStack-based SQS setup, CLI commands, and troubleshooting     | [sqs-commands.md](./AWS/SQS/sqs-commands.md)                              |
+| **Apache Kafka** | Kafka setup (Windows), topic mgmt, producers/consumers, debugging | [kafka-command-windows.md](./AWS/Apache%20Kafka/kafka-command-windows.md) |
+
+</details>
+
+---
+
+<details>
+<summary>🔹 General Tools & Documentation</summary>
+
+| 🗂️ Category       | 📄 Description                           | 🔗 Documentation Link                                                                      |
+| ----------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------ |
+| **General Tools** | Terminal tips, VS Code setup, utilities  | [windows-terminal-commands.md](./General%20Tools/windows-terminal-commands.md)             |
+| **Documentation** | References, best practices, setup guides | [official-documentation-reference.md](./Documentation/official-documentation-reference.md) |
+
+</details>
+
+---
+
+<details open>
+<summary>🔹 Setup & Environment (💡 Start Here)</summary>
+
+| 🗂️ Category            | 📄 Description                          | 🔗 Documentation Link                                                |
+| ---------------------- | --------------------------------------- | -------------------------------------------------------------------- |
+| **Softwares List**     | Full list of developer software & tools | [ReadMe-Softwares-List.md](./Setup/ReadMe-Softwares-List.md)         |
+| **IDE Plugins**        | IntelliJ IDEA & VS Code plugin list     | [ReadMe-IDE-plugins.md](./Setup/ReadMe-IDE-plugins.md)               |
+| **Browser Extensions** | Developer browser extensions            | [ReadMe-browser-extensions.md](./Setup/ReadMe-browser-extensions.md) |
+
+</details>
 
 ---
 
@@ -45,25 +113,23 @@ This repository consolidates essential CLI commands, setup steps, environment co
 
 ## 🙋‍♂️ How to Use
 
-- Browse by category above ☝️
+- Browse categories (expand/collapse as needed) ☝️
 - Copy-paste commands as needed 💻
-- Use it locally or star the repo to reference it later ⭐
-- Open PRs if you’d like to contribute 🔧
+- Use locally or star ⭐ the repo for quick reference
+- Contribute via PRs 🔧 if you’d like to add improvements
 
 ---
 
 ## 🧑‍💻 Author
 
-**Siddhant Patni**  
+**Siddhant Patni**
 [🌐 GitHub](https://github.com/siddhantpatni0407)
 
 ---
 
 ## 📜 License
 
-This project is licensed under the [MIT License](./LICENSE).  
+This project is licensed under the [MIT License](./LICENSE).
 Feel free to use, modify, and share it.
 
 ---
-
-> 🧠 _“The best tool is the one you know how to use well. This repo helps you know many.”_
