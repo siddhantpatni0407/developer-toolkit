@@ -8,13 +8,13 @@ This repository consolidates essential CLI commands, setup steps, environment co
 
 ---
 
-## 📅 Last Updated: `2025-09-12`
+## 📅 Last Updated: `2025-09-10`
 
 ---
 
 ## 📁 Categories Overview
 
-<details>
+<details open>
 <summary>🔹 Setup & Environment (💡 Start Here)</summary>
 
 | 🗂️ Category            | 📄 Description                          | 🔗 Documentation Link                                                |
