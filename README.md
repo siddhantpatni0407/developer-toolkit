@@ -126,10 +126,3 @@ This repository consolidates essential CLI commands, setup steps, environment co
 [🌐 GitHub](https://github.com/siddhantpatni0407)
 
 ---
-
-## 📜 License
-
-This project is licensed under the [MIT License](./LICENSE).
-Feel free to use, modify, and share it.
-
----
