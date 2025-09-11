@@ -1,8 +1,16 @@
 name: Update README last-updated
 
+# Grant the workflow permission to push changes back using the automatically-provided GITHUB_TOKEN.
+# If your repo policies restrict this, see the "PAT alternative" commented section below.
+permissions:
+  contents: write
+
 on:
   push:
     branches: [ main, master ]
+    # optional: to avoid running when only this workflow changes
+    # paths-ignore:
+    #   - '.github/workflows/update-readme-timestamp.yml'
 
 jobs:
   update-readme:
@@ -21,26 +29,25 @@ jobs:
 
       - name: Update README timestamp
         env:
-          TZ: 'Asia/Kolkata'
+          TZ: 'Asia/Kolkata'   # change or remove as needed
         run: |
-          # determine README path
+          # determine README path (customize as required)
           README=README.md
-          # fallback: check Setup folder location (customize if needed)
           if [ ! -f "$README" ]; then README=Setup/ReadMe-Softwares-List.md; fi
           if [ ! -f "$README" ]; then
             echo "README not found at expected paths. Exiting."
             exit 0
           fi
 
-          # persist README path so later steps can use it
+          # persist README path for later steps
           echo "README determined as: $README"
           echo "README=$README" >> $GITHUB_ENV
 
-          # compute new date (change format if you want date-only)
+          # compute new date-time (use only date if preferred: date '+%Y-%m-%d')
           NEW_DATE="$(date '+%Y-%m-%d %H:%M %z')"
           echo "Setting Last Updated → $NEW_DATE in $README"
 
-          # replace or insert the Last Updated marker
+          # Replace or insert the Last Updated marker
           if grep -q -E 'Last Updated:' "$README"; then
             sed -E -i "s#(Last Updated:).*#\1 \`$NEW_DATE\`#g" "$README"
           elif grep -q -E '##.*Last Updated' "$README"; then
@@ -49,6 +56,7 @@ jobs:
             awk -v d="$NEW_DATE" 'NR==1{print; print ""; print "## 📅 Last Updated: `" d "`"; next}1' "$README" > /tmp/README.tmp && mv /tmp/README.tmp "$README"
           fi
 
+          # show diff for debugging
           git --no-pager diff -- "$README" || true
 
       - name: Commit & push if changed
@@ -56,10 +64,10 @@ jobs:
           GIT_EMAIL: github-actions[bot]@users.noreply.github.com
           GIT_NAME: github-actions[bot]
         run: |
-          # README variable is read from GITHUB_ENV (persisted earlier)
+          # README variable is read from $GITHUB_ENV (set earlier)
           echo "Using README path: '$README'"
 
-          # safety: ensure README is set and file exists
+          # safety checks
           if [ -z "$README" ] || [ ! -f "$README" ]; then
             echo "README variable not set or file missing. Nothing to commit."
             exit 0
@@ -68,7 +76,7 @@ jobs:
           git config user.email "$GIT_EMAIL"
           git config user.name "$GIT_NAME"
 
-          # check if README changed (use basename to avoid false positives)
+          # only commit if README actually changed
           if git status --porcelain | grep -q "$(basename "$README")"; then
             git add -- "$README"
             git commit -m "chore: update README Last Updated timestamp" || echo "No commit created"
@@ -76,3 +84,33 @@ jobs:
           else
             echo "No changes in README - nothing to commit."
           fi
+
+# ----------------------------
+# PAT alternative (only necessary if your repo or org policy prevents GITHUB_TOKEN write access)
+# 1. Create a Personal Access Token (PAT) with repo write access.
+# 2. Add it to the repository secrets as: REPO_PAT
+# 3. Replace the "Commit & push if changed" step above with the following (uncomment & use):
+#
+#      - name: Commit & push if changed (PAT)
+#        env:
+#          GIT_EMAIL: github-actions[bot]@users.noreply.github.com
+#          GIT_NAME: github-actions[bot]
+#          REPO_PAT: ${{ secrets.REPO_PAT }}
+#        run: |
+#          echo "Using README path: '$README'"
+#          if [ -z "$README" ] || [ ! -f "$README" ]; then
+#            echo "README missing. Exiting."
+#            exit 0
+#          fi
+#          git config user.email "$GIT_EMAIL"
+#          git config user.name "$GIT_NAME"
+#          if git status --porcelain | grep -q "$(basename "$README")"; then
+#            git add -- "$README"
+#            git commit -m "chore: update README Last Updated timestamp" || echo "No commit created"
+#            # push using PAT so write is allowed
+#            git push "https://x-access-token:${REPO_PAT}@github.com/${{ github.repository }}" HEAD:${{ github.ref_name }}
+#          else
+#            echo "No changes to commit."
+#          fi
+#
+# ----------------------------
