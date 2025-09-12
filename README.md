@@ -30,9 +30,13 @@ This repository consolidates essential CLI commands, setup steps, environment co
 <details>
 <summary>🔹 Version Control</summary>
 
-| 🗂️ Category | 📄 Description                                 | 🔗 Documentation Link                    |
-| ----------- | ---------------------------------------------- | ---------------------------------------- |
-| **Git**     | Version control basics, shortcuts, setup guide | [git-commands.md](./Git/git-commands.md) |
+| 🗂️ Category          | 📄 Description                                              | 🔗 Documentation Link                                      |
+| -------------------- | ----------------------------------------------------------- | ---------------------------------------------------------- |
+| **Git**              | Version control basics, setup, shortcuts, and CLI usage     | [git-commands.md](./Git/git-commands.md)                   |
+| **GitHub CLI**       | Manage repos, issues, PRs directly from the terminal        | [github-cli.md](./Git/github-cli.md)                       |
+| **GitHub Flow**      | Simple workflow with main + feature branches                | [github-best-practices.md](./Git/github-best-practices.md) |
+| **Git Hooks**        | Automate tasks on commit, push, or merge (pre-commit, etc.) | [git-hooks.md](./Git/git-hooks.md)                         |
+| **GitHub Workflows** | CI/CD, automation, linting, releases with GitHub Actions    | [github-workflows.md](./Git/github-workflows.md)           |
 
 </details>
 
