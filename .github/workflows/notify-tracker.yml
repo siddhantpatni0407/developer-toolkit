@@ -1,0 +1,25 @@
+name: Notify tracker repo on push
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send dispatch to tracker
+        env:
+          TRACKER_REPO: "siddhantpatni0407/GitHub-Repo-Tracker" # change to your tracker repo
+          TRACKER_REPO_PAT: ${{ secrets.TRACKER_REPO_PAT }}
+        run: |
+          payload=$(jq -n \
+            --arg r "${GITHUB_REPOSITORY}" \
+            --arg b "${GITHUB_REF_NAME:-$(echo ${GITHUB_REF} | sed 's#refs/heads/##')}" \
+            --arg c "${GITHUB_SHA:0:7}" \
+            --arg a "${GITHUB_ACTOR}" \
+            '{source_repo:$r, source_branch:$b, source_commit:$c, actor:$a}')
+          curl -s -X POST -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token $TRACKER_REPO_PAT" \
+            "https://api.github.com/repos/$TRACKER_REPO/dispatches" \
+            -d "$(jq -n --arg t "repo_changed" --argjson p "$payload" '{event_type:$t, client_payload:$p}')" || true
