@@ -22,95 +22,96 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Prepare metadata and update README (Python)
+      - name: Fill README "Repository Activity Snapshot" block (Python)
         env:
           TZ: 'Asia/Kolkata'
-          GITHUB_EVENT_PATH: ${{ github.event_path }}
         run: |
           set -euo pipefail
 
-          # locate README (customize path if needed)
-          README=README.md
-          if [ ! -f "$README" ]; then README=Setup/ReadMe-Softwares-List.md; fi
+          # 1) locate README (customize if needed)
+          README="README.md"
+          if [ ! -f "$README" ]; then
+            README="Setup/ReadMe-Softwares-List.md"
+          fi
+
           if [ ! -f "$README" ]; then
             echo "README not found at expected paths. Exiting."
             exit 0
           fi
-          echo "README path: $README"
-          echo "README=$README" >> $GITHUB_ENV
 
-          # collect metadata
-          NEW_DATE="$(date '+%Y-%m-%d %H:%M %z')"
-          REPO="${GITHUB_REPOSITORY}"
-          BRANCH="${GITHUB_REF_NAME:-$(echo ${GITHUB_REF} | sed 's#refs/heads/##')}"
-          ACTOR="${GITHUB_ACTOR}"
-          COMMIT_SHA="$(git rev-parse --short HEAD 2>/dev/null || echo ${GITHUB_SHA:0:7})"
-          COMMIT_URL="https://github.com/${REPO}/commit/${COMMIT_SHA}"
-          # commit message: prefer git log; otherwise read event payload
-          COMMIT_MSG="$(git log -1 --pretty=%s 2>/dev/null || python -c "import json,sys; p=json.load(open('${GITHUB_EVENT_PATH}')); print(p.get('head_commit', {}).get('message',''))" )"
-          COMPARE_URL="https://github.com/${REPO}/compare/${GITHUB_SHA}^...${GITHUB_SHA}"
-          RUN_URL="https://github.com/${REPO}/actions/runs/${GITHUB_RUN_ID}"
-          RUN_NUM="${GITHUB_RUN_NUMBER:-${GITHUB_RUN_ID}}"
+          echo "Using README path: $README"
 
-          # export for python section (same step runs Python)
-          export NEW_DATE REPO BRANCH ACTOR COMMIT_SHA COMMIT_URL COMMIT_MSG COMPARE_URL RUN_URL RUN_NUM README
-
-          # Python: safely replace or insert the block (handles quoting/encoding reliably)
+          # 2) Run single python script to collect metadata and safely update README
           python - <<'PY'
-import os, re, sys
+import os, re, subprocess, sys
 
-readme = os.environ['README']
-new_date = os.environ['NEW_DATE']
-repo = os.environ['REPO']
-branch = os.environ['BRANCH']
-actor = os.environ['ACTOR']
-commit_sha = os.environ['COMMIT_SHA']
-commit_url = os.environ['COMMIT_URL']
-commit_msg = os.environ.get('COMMIT_MSG','').replace('`', "'")
-compare_url = os.environ['COMPARE_URL']
-run_url = os.environ['RUN_URL']
-run_num = os.environ['RUN_NUM']
+readme = os.getenv("README", "README.md")
 
-# Block title we'll write (suggestion used)
+# Helper to run git cmd and fallback gracefully
+def git(cmd):
+    try:
+        out = subprocess.check_output(["git"] + cmd, stderr=subprocess.DEVNULL).decode().strip()
+        return out
+    except Exception:
+        return ""
+
+# metadata (safe fallbacks)
+new_date = subprocess.check_output(["date", "+%Y-%m-%d %H:%M %z"]).decode().strip() if os.name != "nt" else ""
+repo = os.getenv("GITHUB_REPOSITORY", "")
+# get branch: try git, else GITHUB_REF
+branch = git(["rev-parse", "--abbrev-ref", "HEAD"]) or os.getenv("GITHUB_REF", "").replace("refs/heads/", "")
+actor = os.getenv("GITHUB_ACTOR", "")
+commit_sha = git(["rev-parse", "--short", "HEAD"]) or os.getenv("GITHUB_SHA", "")[:7]
+commit_url = f"https://github.com/{repo}/commit/{commit_sha}" if repo and commit_sha else ""
+# commit message
+commit_msg = git(["log", "-1", "--pretty=%s"]) or ""
+# compare url using SHA
+gh_sha = os.getenv("GITHUB_SHA", "")
+compare_url = f"https://github.com/{repo}/compare/{gh_sha}^...{gh_sha}" if repo and gh_sha else ""
+run_id = os.getenv("GITHUB_RUN_ID", "")
+run_num = os.getenv("GITHUB_RUN_NUMBER", run_id)
+run_url = f"https://github.com/{repo}/actions/runs/{run_id}" if repo and run_id else ""
+
+# Title and block we will insert
 title_heading = "## 📋 Repository Activity Snapshot"
+block = (
+    f"{title_heading}\n"
+    f"## 📅 Last Updated : `{new_date}`\n"
+    f"## 📦 Repository : `{repo}`\n"
+    f"## 🔀 Branch : `{branch}`\n"
+    f"## 👤 Author : `{actor}`\n"
+    f"## 📝 Commit Message : `{commit_msg.replace('`', \"'\")}`\n"
+    f"## 🔗 Commit : [`{commit_sha}`]({commit_url})\n"
+    f"## 📊 Compare : [View changes]({compare_url})\n"
+    f"## ⚙️ Workflow Run : [Run #{run_num}]({run_url})\n\n"
+    f"---\n"
+)
 
-block = f"""{title_heading}
-## 📅 Last Updated : `{new_date}`
-## 📦 Repository : `{repo}`
-## 🔀 Branch : `{branch}`
-## 👤 Author : `{actor}`
-## 📝 Commit Message : `{commit_msg}`
-## 🔗 Commit : [{commit_sha}]({commit_url})
-## 📊 Compare : [View changes]({compare_url})
-## ⚙️ Workflow Run : [Run #{run_num}]({run_url})
-
----
-"""
-
-with open(readme, 'r', encoding='utf-8') as f:
+# read file
+with open(readme, "r", encoding="utf-8") as f:
     content = f.read()
 
-# Try to find an existing block starting with either the suggested heading or older "## 📅 Last Updated"
+# regex: find existing block starting with either title_heading or old "## 📅 Last Updated"
 pattern = re.compile(r"(?:##\s*📋\s*Repository\s*Activity\s*Snapshot|##\s*📅\s*Last\s*Updated).*?(?=\n##\s|\Z)", re.S)
-
 if pattern.search(content):
     new_content = pattern.sub(block.rstrip(), content, count=1)
 else:
-    # insert after first H1 (# ...)
+    # insert after first H1 if present, else prepend
     m = re.search(r"^# .*$", content, flags=re.M)
     if m:
         idx = m.end()
         new_content = content[:idx] + "\n\n" + block + content[idx:]
     else:
-        # if no H1, prepend
         new_content = block + "\n\n" + content
 
 if new_content != content:
-    with open(readme, 'w', encoding='utf-8') as f:
+    with open(readme, "w", encoding="utf-8") as f:
         f.write(new_content)
-    print("README updated with Repository Activity Snapshot.")
+    print("README updated.")
+    sys.exit(0)
 else:
-    print("README already up-to-date.")
+    print("No changes required.")
+    sys.exit(0)
 PY
 
       - name: Commit & push if changed
@@ -120,18 +121,11 @@ PY
         run: |
           set -euo pipefail
 
-          echo "Using README path: $README"
-
-          if [ -z "${README:-}" ] || [ ! -f "${README:-}" ]; then
-            echo "README not set or missing; nothing to commit."
-            exit 0
-          fi
-
-          git config user.email "$GIT_EMAIL"
-          git config user.name "$GIT_NAME"
-
-          if git status --porcelain | grep -q "$(basename "$README")"; then
-            git add -- "$README"
+          echo "Checking for changes..."
+          if git status --porcelain | grep -q README || git status --porcelain | grep -q "ReadMe-Softwares-List.md"; then
+            git config user.email "$GIT_EMAIL"
+            git config user.name "$GIT_NAME"
+            git add --all
             git commit -m "chore: update README Repository Activity Snapshot" || echo "No commit created"
             git push origin HEAD:${{ github.ref_name }}
           else
