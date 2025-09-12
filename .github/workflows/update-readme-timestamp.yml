@@ -1,11 +1,16 @@
 name: Update README last-updated
 
+# Grant the workflow permission to push changes back using the automatically-provided GITHUB_TOKEN.
+# If your repo policies restrict this, see the "PAT alternative" commented section below.
 permissions:
   contents: write
 
 on:
   push:
     branches: [ main, master ]
+    # optional: to avoid running when only this workflow changes
+    # paths-ignore:
+    #   - '.github/workflows/update-readme-timestamp.yml'
 
 jobs:
   update-readme:
@@ -17,127 +22,95 @@ jobs:
           echo "Triggered by github-actions. Exiting to avoid loop."
           exit 0
 
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Create and run README updater (Python)
+      - name: Update README timestamp
         env:
-          TZ: 'Asia/Kolkata'
-          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          TZ: 'Asia/Kolkata'   # change or remove as needed
         run: |
-          set -euo pipefail
-
-          # 1) determine README path (customize if needed)
-          README="README.md"
-          if [ ! -f "$README" ]; then
-            README="Setup/ReadMe-Softwares-List.md"
-          fi
+          # determine README path (customize as required)
+          README=README.md
+          if [ ! -f "$README" ]; then README=Setup/ReadMe-Softwares-List.md; fi
           if [ ! -f "$README" ]; then
             echo "README not found at expected paths. Exiting."
             exit 0
           fi
-          echo "README path: $README"
+
+          # persist README path for later steps
+          echo "README determined as: $README"
           echo "README=$README" >> $GITHUB_ENV
 
-          # 2) write the Python script to a temp file (single-quoted heredoc to avoid YAML parsing)
-          cat <<'PY' > /tmp/update_readme.py
-#!/usr/bin/env python3
-import os, re, subprocess, sys, json
+          # compute new date-time (use only date if preferred: date '+%Y-%m-%d')
+          NEW_DATE="$(date '+%Y-%m-%d %H:%M %z')"
+          echo "Setting Last Updated → $NEW_DATE in $README"
 
-# helpers
-def run_cmd(cmd):
-    try:
-        return subprocess.check_output(cmd, stderr=subprocess.DEVNULL).decode().strip()
-    except Exception:
-        return ""
+          # Replace or insert the Last Updated marker
+          if grep -q -E 'Last Updated:' "$README"; then
+            sed -E -i "s#(Last Updated:).*#\1 \`$NEW_DATE\`#g" "$README"
+          elif grep -q -E '##.*Last Updated' "$README"; then
+            sed -E -i "s#(##.*Last Updated).*#\1 \`$NEW_DATE\`#g" "$README"
+          else
+            awk -v d="$NEW_DATE" 'NR==1{print; print ""; print "## 📅 Last Updated: `" d "`"; next}1' "$README" > /tmp/README.tmp && mv /tmp/README.tmp "$README"
+          fi
 
-# gather metadata (with safe fallbacks)
-new_date = run_cmd(["date", "+%Y-%m-%d %H:%M %z"]) or ""
-repo = os.getenv("GITHUB_REPOSITORY", "")
-gh_ref = os.getenv("GITHUB_REF", "")
-branch = os.getenv("GITHUB_REF_NAME", "") or (gh_ref.replace("refs/heads/", "") if gh_ref else run_cmd(["git", "rev-parse", "--abbrev-ref", "HEAD"]))
-actor = os.getenv("GITHUB_ACTOR", "")
-commit_sha = run_cmd(["git", "rev-parse", "--short", "HEAD"]) or (os.getenv("GITHUB_SHA","")[:7])
-commit_url = f"https://github.com/{repo}/commit/{commit_sha}" if repo and commit_sha else ""
-# commit message: prefer git, otherwise event payload
-commit_msg = run_cmd(["git", "log", "-1", "--pretty=%s"]) or ""
-try:
-    event_path = os.getenv("GITHUB_EVENT_PATH")
-    if event_path and os.path.exists(event_path) and not commit_msg:
-        with open(event_path, "r", encoding="utf-8") as f:
-            ev = json.load(f)
-            commit_msg = ev.get("head_commit", {}).get("message","") or commit_msg
-except Exception:
-    pass
-# sanitize commit message for markdown
-commit_msg = commit_msg.replace("`", "'")
-gh_sha = os.getenv("GITHUB_SHA", "")
-compare_url = f"https://github.com/{repo}/compare/{gh_sha}^...{gh_sha}" if repo and gh_sha else ""
-run_id = os.getenv("GITHUB_RUN_ID", "")
-run_num = os.getenv("GITHUB_RUN_NUMBER", run_id)
-run_url = f"https://github.com/{repo}/actions/runs/{run_id}" if repo and run_id else ""
-
-# Block title and content
-title_heading = "## 📋 Repository Activity Snapshot"
-block = (
-    f"{title_heading}\n"
-    f"## 📅 Last Updated : `{new_date}`\n"
-    f"## 📦 Repository : `{repo}`\n"
-    f"## 🔀 Branch : `{branch}`\n"
-    f"## 👤 Author : `{actor}`\n"
-    f"## 📝 Commit Message : `{commit_msg}`\n"
-    f"## 🔗 Commit : [`{commit_sha}`]({commit_url})\n"
-    f"## 📊 Compare : [View changes]({compare_url})\n"
-    f"## ⚙️ Workflow Run : [Run #{run_num}]({run_url})\n\n"
-    f"---\n"
-)
-
-# read README
-readme = os.getenv("README", "README.md")
-with open(readme, "r", encoding="utf-8") as fh:
-    content = fh.read()
-
-# regex to find existing block starting with either title_heading or "## 📅 Last Updated"
-pattern = re.compile(r"(?:##\s*📋\s*Repository\s*Activity\s*Snapshot|##\s*📅\s*Last\s*Updated).*?(?=\n##\s|\Z)", re.S)
-
-if pattern.search(content):
-    new_content = pattern.sub(block.rstrip(), content, count=1)
-else:
-    # insert after first H1 if present, else prepend
-    m = re.search(r"^# .*$", content, flags=re.M)
-    if m:
-        idx = m.end()
-        new_content = content[:idx] + "\n\n" + block + content[idx:]
-    else:
-        new_content = block + "\n\n" + content
-
-if new_content != content:
-    with open(readme, "w", encoding="utf-8") as fh:
-        fh.write(new_content)
-    print("README updated.")
-else:
-    print("No changes required.")
-PY
-
-          # 3) run the Python script
-          python3 /tmp/update_readme.py
+          # show diff for debugging
+          git --no-pager diff -- "$README" || true
 
       - name: Commit & push if changed
         env:
           GIT_EMAIL: github-actions[bot]@users.noreply.github.com
           GIT_NAME: github-actions[bot]
         run: |
-          set -euo pipefail
-          echo "Checking for changes..."
-          # If README or the Setup ReadMe changed, commit
-          if git status --porcelain | grep -q README || git status --porcelain | grep -q "ReadMe-Softwares-List.md"; then
-            git config user.email "$GIT_EMAIL"
-            git config user.name "$GIT_NAME"
-            git add --all
-            git commit -m "chore: update README Repository Activity Snapshot" || echo "No commit created"
+          # README variable is read from $GITHUB_ENV (set earlier)
+          echo "Using README path: '$README'"
+
+          # safety checks
+          if [ -z "$README" ] || [ ! -f "$README" ]; then
+            echo "README variable not set or file missing. Nothing to commit."
+            exit 0
+          fi
+
+          git config user.email "$GIT_EMAIL"
+          git config user.name "$GIT_NAME"
+
+          # only commit if README actually changed
+          if git status --porcelain | grep -q "$(basename "$README")"; then
+            git add -- "$README"
+            git commit -m "chore: update README Last Updated timestamp" || echo "No commit created"
             git push origin HEAD:${{ github.ref_name }}
           else
-            echo "No README changes to commit."
+            echo "No changes in README - nothing to commit."
           fi
+
+# ----------------------------
+# PAT alternative (only necessary if your repo or org policy prevents GITHUB_TOKEN write access)
+# 1. Create a Personal Access Token (PAT) with repo write access.
+# 2. Add it to the repository secrets as: REPO_PAT
+# 3. Replace the "Commit & push if changed" step above with the following (uncomment & use):
+#
+#      - name: Commit & push if changed (PAT)
+#        env:
+#          GIT_EMAIL: github-actions[bot]@users.noreply.github.com
+#          GIT_NAME: github-actions[bot]
+#          REPO_PAT: ${{ secrets.REPO_PAT }}
+#        run: |
+#          echo "Using README path: '$README'"
+#          if [ -z "$README" ] || [ ! -f "$README" ]; then
+#            echo "README missing. Exiting."
+#            exit 0
+#          fi
+#          git config user.email "$GIT_EMAIL"
+#          git config user.name "$GIT_NAME"
+#          if git status --porcelain | grep -q "$(basename "$README")"; then
+#            git add -- "$README"
+#            git commit -m "chore: update README Last Updated timestamp" || echo "No commit created"
+#            # push using PAT so write is allowed
+#            git push "https://x-access-token:${REPO_PAT}@github.com/${{ github.repository }}" HEAD:${{ github.ref_name }}
+#          else
+#            echo "No changes to commit."
+#          fi
+#
+# ----------------------------
