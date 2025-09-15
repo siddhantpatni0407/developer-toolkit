@@ -45,11 +45,12 @@ This repository consolidates essential CLI commands, setup steps, environment co
 <details>
 <summary>🔹 Programming Languages</summary>
 
-| 🗂️ Category | 📄 Description                                     | 🔗 Documentation Link                                             |
-| ----------- | -------------------------------------------------- | ----------------------------------------------------------------- |
-| **Java**    | Java CLI usage, builds, and environment setup      | [java-commands-windows.md](./Java/java-commands-windows.md)       |
-| **Python**  | Virtual environments, pip, and commands for Python | [python-commands-windows.md](./Python/python-commands-windows.md) |
-| **React**   | React CLI commands, tooling setup, and tips        | [react-commands.md](./React/react-commands.md)                    |
+| 🗂️ Category | 📄 Description                                                | 🔗 Documentation Link                                             |
+| ----------- | ------------------------------------------------------------- | ----------------------------------------------------------------- |
+| **Java**    | Java CLI usage, builds, and environment setup                 | [java-commands-windows.md](./Java/java-commands-windows.md)       |
+| **Python**  | Virtual environments, pip, and commands for Python            | [python-commands-windows.md](./Python/python-commands-windows.md) |
+| **React**   | React CLI commands, tooling setup, and tips                   | [react-commands.md](./React/react-commands.md)                    |
+| **React**   | React project standards, folder structure, and best practices | [react-best-practices.md](./React/react-best-practices.md)        |
 
 </details>
 
