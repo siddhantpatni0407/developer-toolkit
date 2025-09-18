@@ -8,7 +8,7 @@ This repository consolidates essential CLI commands, setup steps, environment co
 
 ---
 
-## 📅 Last Updated: `2025-09-15 12:19 +0530`
+## 📅 Last Updated: `2025-09-18 10:00 +0530`
 
 ---
 
@@ -102,6 +102,21 @@ This repository consolidates essential CLI commands, setup steps, environment co
 | ----------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------ |
 | **General Tools** | Terminal tips, VS Code setup, utilities  | [windows-terminal-commands.md](./General%20Tools/windows-terminal-commands.md)             |
 | **Documentation** | References, best practices, setup guides | [official-documentation-reference.md](./Documentation/official-documentation-reference.md) |
+
+</details>
+
+---
+
+<details>
+<summary>🔹 AI</summary>
+
+| 🗂️ Category        | 📄 Description                                      | 🔗 Documentation Link                                        |
+| ------------------ | --------------------------------------------------- | ------------------------------------------------------------ |
+| **GitHub Copilot** | Best practices for using GitHub Copilot effectively | [best-practices.md](./AI/GitHub%20Copilot/best-practices.md) |
+| **GitHub Copilot** | Useful commands and shortcuts for GitHub Copilot    | [commands.md](./AI/GitHub%20Copilot/commands.md)             |
+| **GitHub Copilot** | Overview of Copilot models and their best uses      | [model-usages.md](./AI/GitHub%20Copilot/model-usages.md)     |
+| **ChatGPT**        | Best practices for interacting with ChatGPT         | [best-practices.md](./AI/ChatGPT/best-practices.md)          |
+| **ChatGPT**        | Overview of ChatGPT models and their best uses      | [model-usages.md](./AI/ChatGPT/model-usages.md)              |
 
 </details>
 
